@@ -1,0 +1,45 @@
+---
+- hosts:
+    - raintank
+  gather_facts: false  
+  vars:
+    username: jgraves
+  sudo: yes
+  tasks:
+    - name: download go
+      get_url: url=https://storage.googleapis.com/golang/go1.4.1.linux-amd64.tar.gz dest=/home/{{ username }}/
+
+    - name: install go
+      unarchive: src=/home/{{ username }}/go1.4.1.linux-amd64.tar.gz dest=/usr/local copy=no
+      environment:
+        GOPATH: "/home/{{ username }}/work"
+
+    - name: edit .bashrc
+      lineinfile: dest=/home/{{ username }}/.bashrc line="{{ item }}"
+      with_items:
+        - "export PATH=$PATH:/usr/local/go/bin"
+        - "export PATH=$PATH:/home/{{ username }}/work/bin"
+        - "export GOPATH=/home/{{ username }}/work"
+
+    - name: install packages
+      apt: pkg={{ item }} update_cache=yes
+      with_items:
+        - git
+        - npm
+
+    - name: clone repo
+      git: repo=https://github.com/raintank/raintank-collector.git clone=yes dest=/home/{{ username }}/raintank-collector/
+
+    - name: get raintank-probe
+      command: /usr/local/go/bin/go get -u github.com/raintank/raintank-probe chdir=/home/{{ username }}
+      environment:
+        GOPATH: "/home/{{ username }}/work"
+
+    - name: copy raintank-probe to raintank-collector dir
+      command: cp /home/{{ username }}/work/bin/raintank-probe /home/{{ username }}/raintank-collector/
+
+    - name: install dependencies
+      command: npm install chdir=/home/{{ username }}/raintank-collector/
+
+    - name: copy raintank config
+      copy: src=files/config.json dest=/etc/config.json

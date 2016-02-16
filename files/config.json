@@ -1,0 +1,9 @@
+{
+"collector": {
+  "name": "google-taiwan"
+},
+"numCPUs": 1,
+"serverUrl": "https://controller.raintank.io",
+"apiKey": "",
+"probeServerPort": 8284
+}
