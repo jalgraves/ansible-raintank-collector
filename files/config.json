@@ -1,6 +1,6 @@
 {
 "collector": {
-  "name": "google-taiwan"
+  "name": ""
 },
 "numCPUs": 1,
 "serverUrl": "https://controller.raintank.io",
