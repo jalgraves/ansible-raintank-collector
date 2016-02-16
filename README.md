@@ -2,7 +2,7 @@
 Ansible play book for deploying private Raintank probes
 Tested using Ansible version 1.9.2
 ## Requirements
-User account on remote hosts with sudo access and public key from local machine add to authorized_keys file on remote host.
+User account on remote hosts running either Ubuntu (use raintank.yml) or CentOS (use raintank_centos.yml) with sudo access and public key from local machine added to authorized_keys file.
 
 ## Instructions
 To create a private probe for Raintank add the host to the hosts file and edit raintank.yml. Input the host and change the username variable to your own username.
